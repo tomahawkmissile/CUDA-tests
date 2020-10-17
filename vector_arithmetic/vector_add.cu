@@ -10,7 +10,7 @@ __global__ void run32_gpu(float* out, float* a, float* b, int n) {
         out[i]=a[i]+b[i];
     }
 }
-__global__ void run64_gpu(float* out, float* a, float* b, int n) {
+__global__ void run64_gpu(double* out, double* a, double* b, int n) {
     for(unsigned int i=0;i<n;i++) {
         out[i]=a[i]+b[i];
     }
