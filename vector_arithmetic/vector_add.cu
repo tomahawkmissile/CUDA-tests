@@ -18,14 +18,14 @@ __global__ void run64_gpu(double* out, double* a, double* b, int n) {
 
 int main(int argc, char* argv[]) {
 
-    if(argc!=1) {
+    if(argc!=2) {
         printf("Only pass 1 argument, which is the amount of array elements.\n");
         return -1;
     }
 
     int n=0;
 
-    sscanf(argv[0],"%i",&n);
+    sscanf(argv[1],"%i",&n);
     printf("Starting with %i array elements.\n", n);
 
     float *fa, *fb, *fout, *gfa, *gfb, *gfout;
