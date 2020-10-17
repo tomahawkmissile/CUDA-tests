@@ -23,11 +23,11 @@ void run64_cpu() {
 
 int main(int argc, char* argv[]) {
 
-    if(argc!=1) {
+    if(argc!=2) {
         printf("Only pass 1 argument, which is the amount of array elements.\n");
         return -1;
     }
-    sscanf(argv[0],"%i",&n);
+    sscanf(argv[1],"%i",&n);
     printf("Starting with %i array elements.\n", n);
 
     fa=(float*)malloc(sizeof(float)*n);
