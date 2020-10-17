@@ -22,10 +22,11 @@ int main(int argc, char* argv[]) {
         printf("Only pass 1 argument, which is the amount of array elements.\n");
         return -1;
     }
+
+    int n=0;
+
     sscanf(argv[0],"%i",&n);
     printf("Starting with %i array elements.\n", n);
-
-    int n;
 
     float *fa, *fb, *fout, *gfa, *gfb, *gfout;
     double *da, *db, *dout, *gda, *gdb, *gdout; 
@@ -50,6 +51,9 @@ int main(int argc, char* argv[]) {
     cudaMalloc((void**)&gfb, sizeof(float)*n);
     cudaMalloc((void**)&gda, sizeof(double)*n);
     cudaMalloc((void**)&gdb, sizeof(double)*n);
+
+    cudaMalloc((void**)&gfout, sizeof(float)*n);
+    cudaMalloc((void**)&gdout, sizeof(double)*n);
 
     cudaMemcpy(gfa, fa, sizeof(float)*n, cudaMemcpyHostToDevice);
     cudaMemcpy(gfb, fb, sizeof(float)*n, cudaMemcpyHostToDevice);
