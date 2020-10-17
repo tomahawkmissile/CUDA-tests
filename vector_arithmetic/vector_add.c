@@ -50,7 +50,7 @@ int main() {
     clock_t d_end = clock();
     printf("CPU time used (FP64 vector addition): %f\n", ((double)(d_end-d_start))/CLOCKS_PER_SEC);
 
-    printf("Done.");
+    printf("Done.\n");
 
     return 0;
 }
