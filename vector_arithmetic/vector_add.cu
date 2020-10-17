@@ -5,19 +5,14 @@
 
 //This program adds a vector array of FP32 and FP64 types on a single CPU core.
 
-int n;
-
-float *fa, *fb, *fout, *gfa, *gfb, *gfout;
-double *da, *db, *dout, *gda, *gdb, *gdout; 
-
-__global__ void run32_gpu() {
+__global__ void run32_gpu(float* out, float* a, float* b, int n) {
     for(unsigned int i=0;i<n;i++) {
-        fout[i]=fa[i]+fb[i];
+        out[i]=a[i]+b[i];
     }
 }
-__global__ void run64_gpu() {
+__global__ void run64_gpu(float* out, float* a, float* b, int n) {
     for(unsigned int i=0;i<n;i++) {
-        dout[i]=da[i]+db[i];
+        out[i]=a[i]+b[i];
     }
 }
 
@@ -29,6 +24,11 @@ int main(int argc, char* argv[]) {
     }
     sscanf(argv[0],"%i",&n);
     printf("Starting with %i array elements.\n", n);
+
+    int n;
+
+    float *fa, *fb, *fout, *gfa, *gfb, *gfout;
+    double *da, *db, *dout, *gda, *gdb, *gdout; 
 
     fa=(float*)malloc(sizeof(float)*n);
     fb=(float*)malloc(sizeof(float)*n);
@@ -57,12 +57,12 @@ int main(int argc, char* argv[]) {
     cudaMemcpy(gdb, db, sizeof(double)*n, cudaMemcpyHostToDevice);
 
     clock_t f_start = clock();
-    run32_gpu<<<1,1>>>();
+    run32_gpu<<<1,1>>>(gfout, gfa, gfb, n);
     clock_t f_end = clock();
     printf("FP32 test took: %f\n",((double)(f_end-f_start))/CLOCKS_PER_SEC);
 
     clock_t d_start = clock();
-    run64_gpu<<<1,1>>>();
+    run64_gpu<<<1,1>>>(gdout, gda, gdb, n);
     clock_t d_end = clock();
     printf("FP64 test took: %f\n",((double)(d_end-d_start))/CLOCKS_PER_SEC);
 
