@@ -72,5 +72,19 @@ int main(int argc, char* argv[]) {
 
     printf("Done.\n");
 
+    cudaFree(gfa);
+    cudaFree(gfb);
+    cudaFree(gfout);
+    cudaFree(gda);
+    cudaFree(gdb);
+    cudaFree(gdout);
+
+    free(fa);
+    free(fb);
+    free(fout);
+    free(da);
+    free(db);
+    free(dout);
+
     return 0;
 }
