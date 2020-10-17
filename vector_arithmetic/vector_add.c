@@ -12,10 +12,10 @@ int main() {
     printf("Starting with %i array elements.", ARRAY_SIZE);
 
     //Output arrays
-    uint16_t* shorts = (uint16_t*)malloc(sizeof(uint8_t)*ARRAY_SIZE);
-    uint32_t* ints = (uint32_t*)malloc(sizeof(uint8_t)*ARRAY_SIZE);
-    float* floats = (float*)malloc(sizeof(uint8_t)*ARRAY_SIZE);
-    double* doubles = (double*)malloc(sizeof(uint8_t)*ARRAY_SIZE);
+    uint16_t* shorts = (uint16_t*)malloc(sizeof(uint16_t)*ARRAY_SIZE);
+    uint32_t* ints = (uint32_t*)malloc(sizeof(uint32_t)*ARRAY_SIZE);
+    float* floats = (float*)malloc(sizeof(float)*ARRAY_SIZE);
+    double* doubles = (double*)malloc(sizeof(double)*ARRAY_SIZE);
 
     uint16_t resize_index = ARRAY_SIZE>65535 ? 65535 : ARRAY_SIZE;
     //Short performance
