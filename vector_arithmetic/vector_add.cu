@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <time.h>
 
-//This program adds a vector array of FP32 and FP64 types on a single CPU core.
+//This program adds a vector array of FP32 and FP64 types on a single GPU thread.
 
 __global__ void run32_gpu(float* out, float* a, float* b, int n) {
     for(unsigned int i=0;i<n;i++) {
