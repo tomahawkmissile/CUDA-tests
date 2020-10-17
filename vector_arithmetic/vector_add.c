@@ -3,52 +3,58 @@
 #include <stdint.h>
 #include <time.h>
 
-//This program adds a vector array of different variable types on a single CPU core.
+//This program adds a vector array of FP32 and FP64 types on a single CPU core.
 
-#define ARRAY_SIZE 1000000 //If size is larger than variable maximum value, the maximum value of the variable type will be used.
+int n;
 
-int main() {
+float *fa, *fb, *fout;
+double *da, *db, *dout;
 
-    printf("Starting with %i array elements.\n", ARRAY_SIZE);
-
-    //Output arrays
-    uint16_t* shorts = (uint16_t*)malloc(sizeof(uint16_t)*ARRAY_SIZE);
-    uint32_t* ints = (uint32_t*)malloc(sizeof(uint32_t)*ARRAY_SIZE);
-    float* floats = (float*)malloc(sizeof(float)*ARRAY_SIZE);
-    double* doubles = (double*)malloc(sizeof(double)*ARRAY_SIZE);
-
-    uint16_t resize_index = ARRAY_SIZE>65535 ? 65535 : ARRAY_SIZE;
-    //Short performance
-    clock_t s_start = clock();
-    for(uint16_t i=0;i<resize_index;i++) {
-        shorts[i]=(i+i);
+void run32_cpu() {
+    for(unsigned int i=0;i<n;i++) {
+        fout[i]=fa[i]+fb[i];
     }
-    clock_t s_end = clock();
-    printf("CPU time used (uint16_t vector addition): %f\n", ((double)(s_end-s_start))/CLOCKS_PER_SEC);
-
-    //Integer performance
-    clock_t i_start = clock();
-    for(uint32_t i=0;i<ARRAY_SIZE;i++) {
-        ints[i]=(i+i);
+}
+void run64_cpu() {
+    for(unsigned int i=0;i<n;i++) {
+        dout[i]=da[i]+db[i];
     }
-    clock_t i_end = clock();
-    printf("CPU time used (uint32_t vector addition): %f\n", ((double)(i_end-i_start))/CLOCKS_PER_SEC);
+}
 
-    //Float performance
+int main(int argc, char* argv[]) {
+
+    if(argc!=1) {
+        printf("Only pass 1 argument, which is the amount of array elements.\n");
+        return -1;
+    }
+    sscanf(argv[0],"%i",&n);
+    printf("Starting with %i array elements.\n", n);
+
+    fa=(float*)malloc(sizeof(float)*n);
+    fb=(float*)malloc(sizeof(float)*n);
+    fout=(float*)malloc(sizeof(float)*n);
+    
+    da=(double*)malloc(sizeof(double)*n);
+    db=(double*)malloc(sizeof(double)*n);
+    dout=(double*)malloc(sizeof(double)*n);
+
+    for(unsigned int i=0;i<n;i++) {
+        fa[i]=1.0;
+        fb[i]=(float)i;
+        
+        da[i]=1.0;
+        db[i]=(double)i;
+    }
+
     clock_t f_start = clock();
-    for(uint32_t i=0;i<ARRAY_SIZE;i++) {
-        floats[i]=(i+i+0.5);
-    }
+    run32_cpu();
     clock_t f_end = clock();
-    printf("CPU time used (FP32 vector addition): %f\n", ((double)(f_end-f_start))/CLOCKS_PER_SEC);
+    printf("FP32 test took: %f\n",((double)(f_end-f_start))/CLOCKS_PER_SEC);
 
-    //Double performance
     clock_t d_start = clock();
-    for(uint32_t i=0;i<ARRAY_SIZE;i++) {
-        doubles[i]=(i+i+0.5);
-    }
+    run64_cpu();
     clock_t d_end = clock();
-    printf("CPU time used (FP64 vector addition): %f\n", ((double)(d_end-d_start))/CLOCKS_PER_SEC);
+    printf("FP64 test took: %f\n",((double)(d_end-d_start))/CLOCKS_PER_SEC);
 
     printf("Done.\n");
 
