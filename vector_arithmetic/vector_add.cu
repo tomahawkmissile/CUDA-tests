@@ -15,6 +15,18 @@ __global__ void run64_gpu(double* out, double* a, double* b, int n) {
         out[i]=a[i]+b[i];
     }
 }
+__global__ void run32_parallel(float* out, float* a, float* b, int n) {
+    int xid = blockIdx.x * blockDim.x + threadIdx.x;
+    if(n<xid) {
+        out[xid]=a[xid]+b[xid];
+    }
+}
+__global__ void run64_parallel(double* out, double* a, double* b, int n) {
+    int xid = blockIdx.x * blockDim.x + threadIdx.x;
+    if(n<xid) {
+        out[xid]=a[xid]+b[xid];
+    }
+}
 
 int main(int argc, char* argv[]) {
 
@@ -63,12 +75,24 @@ int main(int argc, char* argv[]) {
     clock_t f_start = clock();
     run32_gpu<<<1,1>>>(gfout, gfa, gfb, n);
     clock_t f_end = clock();
-    printf("FP32 test took: %f\n",((double)(f_end-f_start))/CLOCKS_PER_SEC);
+    printf("FP32 single-thread test took: %f\n",((double)(f_end-f_start))/CLOCKS_PER_SEC);
 
     clock_t d_start = clock();
     run64_gpu<<<1,1>>>(gdout, gda, gdb, n);
     clock_t d_end = clock();
-    printf("FP64 test took: %f\n",((double)(d_end-d_start))/CLOCKS_PER_SEC);
+    printf("FP64 single-thread test took: %f\n",((double)(d_end-d_start))/CLOCKS_PER_SEC);
+
+
+    f_start = clock();
+    run32_parallel<<<1,256>>>(gfout, gfa, gfb, n);
+    f_end = clock();
+    printf("FP32 single-thread test took: %f\n",((double)(f_end-f_start))/CLOCKS_PER_SEC);
+
+    d_start = clock();
+    run64_parallel<<<1,256>>>(gdout, gda, gdb, n);
+    d_end = clock();
+    printf("FP64 single-thread test took: %f\n",((double)(d_end-d_start))/CLOCKS_PER_SEC);
+
 
     printf("Done.\n");
 
